@@ -5,5 +5,6 @@ JWT_EXPIRE_IN =
 JWT_SECRET = 
 
 * make sure you have mongodb installed
+* make sure rabbitmq is installed and running
 * run the various microservices by npm run start:dev for dev mode in each of the folder terminal
 postmandocumentation url: https://documenter.getpostman.com/view/33482444/2sA35Baims
