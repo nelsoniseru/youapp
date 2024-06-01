@@ -1,0 +1,9 @@
+* cd into the different folders and do "yarn install"
+* In each of the folders create an env file with the variable listed below
+DATABASE_URI = 
+JWT_EXPIRE_IN = 
+JWT_SECRET = 
+
+* make sure you have mongodb installed
+* run the various microservices by npm run start:dev for dev mode in each of the folder terminal
+postmandocumentation url: https://documenter.getpostman.com/view/33482444/2sA35Baims
