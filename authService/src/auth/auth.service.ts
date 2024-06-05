@@ -6,8 +6,6 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom} from 'rxjs';
 import * as bcrypt from 'bcrypt';
 
-import { LoginSchema } from './dto/login.dto';
-import { RegisterSchema } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,11 +14,7 @@ export class AuthService {
     @Inject('USER_SERVICE')  private rabbitClient: ClientProxy
   ) {}
   async login(user) {
-    const validationeRes = LoginSchema.validate(user)
-   if(validationeRes.error){
-    const e = validationeRes.error.details.map((e)=>e.message)
-    return {statusCode:400, errors:e[0]}
-   }
+  
     const findUser = await firstValueFrom(this.rabbitClient.send('get-user-email-username', {email:user.email}))
 
     if (findUser && bcrypt.compareSync(user.password, findUser.password)) {
@@ -35,11 +29,7 @@ export class AuthService {
   }
 
   async register(user) {
-   const validationeRes = RegisterSchema.validate(user)
-   if(validationeRes.error){
-    const e = validationeRes.error.details.map((e)=>e.message)
-    return {statusCode:400, errors:e[0]}
-   }
+ 
     const findUserEmail = await firstValueFrom(this.rabbitClient.send('get-user-email', {email:user.email}))
 
    let findUsername = await firstValueFrom(this.rabbitClient.send('get-username', {username:user.username}));

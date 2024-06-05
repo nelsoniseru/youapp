@@ -1,6 +1,6 @@
 import * as Joi from 'joi'
 
-export const ProfileSchema = Joi.object({
+export const  profileSchema = Joi.object({
   display_name: Joi.string().required(),
   gender: Joi.string().required(),
   birthday: Joi.date(),

@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Request,UsePipes } from '@nestjs/common';
 import { UserService } from './users.service';
-import { User } from './schemas/users.schema';
+import { profileSchema } from './schemas/profile.schema';
+import { ProfileDto } from './dto/profile.dto';
+import { JoiValidationPipe } from './pipes/joi-validation.pipes';
+
 import {
   Ctx,
   EventPattern,
@@ -42,13 +45,15 @@ export class UserController {
     return this.userService.GetUserProfile(userId);
   }
   @Post('createProfile')
-  createProfile(@Body() user:any, @Request() request) {
+  @UsePipes(new JoiValidationPipe(profileSchema))
+  createProfile(@Body() user:ProfileDto, @Request() request) {
     const userId = request.user;
     return this.userService.createProfile(user,userId);
   }
 
   @Put('updateProfile')
-  updateProfile( @Request() request, @Body() user:any) {
+  @UsePipes(new JoiValidationPipe(profileSchema))
+  updateProfile( @Request() request, @Body() user:ProfileDto) {
     const userId = request.user;
     return this.userService.updateProfile(user,userId);
   }

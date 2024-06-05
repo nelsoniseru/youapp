@@ -1,6 +1,5 @@
-import * as Joi from 'joi'
+export class LoginDto {
+  email: string;
+  password: string;
+}
 
-export const LoginSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string()
-})

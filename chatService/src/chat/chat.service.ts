@@ -5,7 +5,6 @@ import { Chat, ChatDocument } from './schemas/chat.schema';
 import { Message, MessageDocument } from './schemas/message.schema';
 import { firstValueFrom} from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import {  chatSchema } from './dto/chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -36,11 +35,6 @@ export class ChatService {
   }
 
   async createMessage(chat,id){
-    const validationeRes  = await chatSchema.validate(chat);
-    if(validationeRes.error){
-     const e = validationeRes.error.details.map((e)=>e.message)
-     return {statusCode:400, errors:e[0]}
-    }
 
     const existingChatRoom = await this.chatModel.findOne({_id:chat.chatId})
     if(!existingChatRoom) throw new HttpException('chat room not found', HttpStatus.BAD_REQUEST);

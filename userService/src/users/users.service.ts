@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/users.schema';
 
-import { ProfileSchema } from './dto/users.dto';
 
 @Injectable()
 export class UserService {
@@ -39,21 +38,13 @@ export class UserService {
   }
 
   async createProfile(user,userId) {
-    const validationeRes  = await  ProfileSchema.validate(user);
-    if(validationeRes.error){
-     const e = validationeRes.error.details.map((e)=>e.message)
-     return {statusCode:400, errors:e[0]}
-    }
+ 
   await this.userModel.updateOne({ _id:userId}, { $set: user });
   return {statusCode:"200",message:"profile created successfully"}   
   }
 
   async updateProfile(user,id) {
-    const validationeRes  = await ProfileSchema.validate(user);
-    if(validationeRes.error){
-     const e = validationeRes.error.details.map((e)=>e.message)
-     return {statusCode:400, errors:e[0]}
-    }
+ 
     await this.userModel.updateOne({ _id:id }, { $set: user });
     return {statusCode:"200",message:"profile updated successfully"}
   }

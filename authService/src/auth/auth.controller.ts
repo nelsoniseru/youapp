@@ -1,6 +1,10 @@
-import { Controller, Post, Body,Inject } from '@nestjs/common';
+import { Controller, Post, Body,Inject,UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterSchema } from './dto/register.dto';
+import { RegisterSchema } from './schemas/register.schemas';
+import { LoginSchema } from './schemas/login.schema';
+import {LoginDto} from './dto/login.dto'
+import {RegisterDto} from './dto/register.dto'
+import { JoiValidationPipe } from './pipes/joi-validation.pipes';
 
 @Controller('api')
 export class AuthController {
@@ -10,12 +14,14 @@ export class AuthController {
     ) {}
 
   @Post('login')
-   async login(@Body() user: any) {
+  @UsePipes(new JoiValidationPipe(LoginSchema))
+   async login(@Body() user:LoginDto) {
     return this.authService.login(user);
   }
 
   @Post('register')
-  async register(@Body() user: any) {
+  @UsePipes(new JoiValidationPipe(RegisterSchema))
+  async register(@Body() user:RegisterDto) {
     return this.authService.register(user);
   }
 }

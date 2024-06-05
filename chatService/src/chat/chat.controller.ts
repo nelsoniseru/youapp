@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Request,UsePipes } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { MessagePattern } from '@nestjs/microservices';
+import { ChatDto } from './dto/chat.dto';
+import { chatSchema } from './schemas/chats.schema';
+import { JoiValidationPipe } from './pipes/joi-validation.pipes';
 
 @Controller('api')
 export class ChatController {
@@ -8,14 +11,16 @@ export class ChatController {
     private readonly chatService: ChatService,
     ) { }
   @Get("initiateChat/:id")
-  async createChatRoom(@Param('id') id: string,@Request() request,@Body() chat:any) {
+  async createChatRoom(@Param('id') id: string,@Request() request,@Body() chat:ChatDto) {
     const loggedInUser = request.user;
     const userId = request.params.id
     return this.chatService.createChatRoom(loggedInUser,userId);
   }
 
   @Post('sendMessage')
-  async createMessage(@Body() chat:any,@Request() request) {
+  @UsePipes(new JoiValidationPipe(chatSchema))
+
+  async createMessage(@Body() chat:ChatDto,@Request() request) {
     const id = request.user;
     return this.chatService.createMessage(chat,id);
   }
